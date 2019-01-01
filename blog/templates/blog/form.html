@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% if success %}
+  <h5>{{ success }}</h5>
+{% endif %}
+
+{% block content %}
+<form class="blog-form" method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  {{ form.media }}
+  {{ form }}
+  <br>
+  <button type="submit" class="btn">Add post</button>
+</form>
+{% endblock %}
