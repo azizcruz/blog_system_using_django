@@ -3,7 +3,7 @@
 {% block content %}
 <h1 class="center">Latest Posts</h1>
 <div class="row">
-  {% for post in posts %}
+  {% for post in posts_pages %}
   <div class="col s12 m6">
     <div class="card">
       <div class="card-image waves-effect waves-block waves-light">
@@ -23,4 +23,29 @@
   </div>
   {% endfor %}
 </div>
+
+<div class="pagination-wrapper">
+  <ul class="pagination">
+    {% if  posts_pages.has_previous %}
+      <li><a href="?{{ page_var }}={{ posts_pages.previous_page_number }}"><i class="material-icons">chevron_left</i></a></li>
+    {% endif %}
+
+    {% for i in  posts_pages.paginator.page_range %}
+      {% if posts_pages.number == i %}
+          <li class="waves-effects active">
+            <a href="?{{ page_var }}={{ i }}">{{ i }}</a>
+          </li>
+        {% else %}
+          <li class="waves-effects">
+            <a href="?{{ page_var }}={{ i }}">{{ i }}</a>
+          </li>
+      {% endif %}
+    {% endfor %}
+
+    {% if  posts_pages.has_next %}
+      <li><a href="?{{ page_var }}={{ posts_pages.next_page_number }}"><i class="material-icons">chevron_right</i></a></li>
+    {% endif %}
+  </ul>
+</div>
+
 {% endblock %}

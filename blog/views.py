@@ -1,4 +1,5 @@
 from django.shortcuts import render, HttpResponse, get_object_or_404, HttpResponseRedirect, redirect
+from django.core.paginator import Paginator
 from .models import Post
 from .forms import PostForm
 from django.contrib import messages
@@ -7,9 +8,15 @@ from django.contrib import messages
 
 def index(request):
     query = Post.objects.all().order_by('-publish_date')
+    paginator = Paginator(query, 2) # Show 1 post per page
+    page = request.GET.get('page') # Get number of the page from the link
+    posts_pages = paginator.get_page(page) # Request the number of the page to show
+    page_var = 'page'
+
     context = {
         'title': 'Main',
-        'posts': query
+        'posts_pages': posts_pages,
+        'page_var': page_var
     }
 
     return render(request, 'blog/posts.html', context)
