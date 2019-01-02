@@ -46,3 +46,20 @@ input, textarea {
   transition: box-shadow .3s, border .3s;
   transition: box-shadow .3s, border .3s, -webkit-box-shadow .3s;
 }
+.messages {
+  display: inline-block;
+}
+
+.messages li {
+  border: 1px solid #eee;
+  border-left: 3px solid #000;
+  padding: 10px;
+}
+
+.messages li.warning {
+  border-left-color: #ef5350;
+}
+
+.messages li.success {
+  border-left-color:  #388e3c;
+}
