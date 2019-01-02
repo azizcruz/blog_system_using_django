@@ -1,6 +1,7 @@
-from django.shortcuts import render, HttpResponse, get_object_or_404
+from django.shortcuts import render, HttpResponse, get_object_or_404, HttpResponseRedirect, redirect
 from .models import Post
 from .forms import PostForm
+from django.contrib import messages
 
 # Create your views here.
 
@@ -29,16 +30,38 @@ def create_post(request):
         if form.is_valid:
             instance = form.save(commit=False)
             instance.save()
-            form = PostForm()
-            context = {
-                'success': 'Added successfully.',
-                'form': form
-            }
+            messages.success(request, 'Post Added.')
+            return HttpResponseRedirect(instance.get_post_url())
     else:
         form = PostForm()
         context = {
             'form': form,
-            'title': 'Create Post'
+            'title': 'Add Post'
         }
 
     return render(request, 'blog/form.html', context)
+
+def edit_post(request, id):
+    instance = get_object_or_404(Post, id=id)
+    if request.POST:
+        form = PostForm(request.POST, request.FILES, instance=instance)
+        if form.is_valid:
+            instance = form.save(commit=False)
+            instance.save()
+            messages.success(request, 'Post edited')
+            return HttpResponseRedirect(instance.get_post_url())
+
+    else:
+        form = PostForm(instance=instance)
+        context = {
+            'form': form,
+            'title': 'Edit Post'
+        }
+
+    return render(request, 'blog/form.html', context)
+
+def delete_post(request, id):
+    post = get_object_or_404(Post, id=id)
+    post.delete()
+    messages.warning(request, 'Post deleted.')
+    return redirect('main')

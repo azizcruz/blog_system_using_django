@@ -9,7 +9,21 @@
     <link rel="stylesheet" href="{% static "css/style.css" %}">
   </head>
   <body>
+
+  <nav>
+    <div class="nav-wrapper black">
+      <div class="container">
+        <a href="#" class="brand-logo">Bloggy</a>
+        <ul id="nav-mobile" class="right hide-on-med-and-down">
+          <li><a href="{% url 'main' %}">Home</a></li>
+          <li><a href="{% url 'create_post' %}">Add Post</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
     <div class="container">
+      {% include "blog/messages.html" %}
       {% block content %}{% endblock %}
     </div>
   </body>

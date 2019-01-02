@@ -1,4 +1,5 @@
 from django.db import models
+from django.shortcuts import reverse
 
 # Create your models here.
 
@@ -11,3 +12,6 @@ class Post(models.Model):
 
     def __str__(self):
         return self.title
+
+    def get_post_url(self):
+        return reverse('post_detail', kwargs={'id': self.id})

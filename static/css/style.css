@@ -1,3 +1,6 @@
+body {
+  margin-bottom: 30px;
+}
 .post-details {
   border: 1px solid #eee;
   padding: 10px;
@@ -8,4 +11,8 @@
   position: absolute;
   bottom: 10px;
   right: 10px;
+}
+
+input, textarea {
+  color: #000;
 }
