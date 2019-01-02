@@ -2,6 +2,14 @@
 
 {% block content %}
 <h1 class="center">Latest Posts</h1>
+<div class="search-field">
+  <form class="" action="" method="get">
+      <div class="input-field">
+        <input type="text" name="q" value="{{ request.GET.q }}">
+        <button type="submit" name="button" class="btn">Search</button>
+      </div>
+  </form>
+</div>
 <div class="row">
   {% for post in posts_pages %}
   <div class="col s12 m6">
