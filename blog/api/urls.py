@@ -3,8 +3,8 @@ from .views import (PostsAPIList, SinglePostAPI, EditePostAPI, AddPostAPI, Delet
 
 urlpatterns = [
     path(r'', PostsAPIList.as_view(), name='list_posts'),
-    path(r'add/', AddPostAPI.as_view(), name='add_post'),
+    path(r'add/', AddPostAPI.as_view(), name='add'),
     path(r'<pk>/', SinglePostAPI.as_view(), name='single_post'),
-    path(r'<pk>/edit/', EditePostAPI.as_view(), name='edit_post'),
-    path(r'<id>/delete/', DeletePostAPI.as_view(), name='delete_post')
+    path(r'<pk>/edit/', EditePostAPI.as_view(), name='edit'),
+    path(r'<id>/delete/', DeletePostAPI.as_view(), name='delete')
 ]

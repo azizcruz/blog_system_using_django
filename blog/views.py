@@ -1,9 +1,11 @@
 from django.shortcuts import render, HttpResponse, get_object_or_404, HttpResponseRedirect, redirect, Http404
 from django.core.paginator import Paginator
 from .models import Post
-from .forms import PostForm
+from .forms import PostForm, SingUpForm
 from django.contrib import messages
 from django.db.models import Q
+from django.contrib.auth.forms import UserCreationForm
+from django.urls import reverse_lazy
 
 # Create your views here.
 
@@ -88,3 +90,20 @@ def delete_post(request, id):
     post.delete()
     messages.warning(request, 'Post deleted.')
     return redirect('main')
+
+def signup(request):
+    if request.method == 'POST':
+        form = SingUpForm(request.POST)
+        if form.is_valid():
+            instance = form.save()
+            instance.save()
+            messages.success(request, 'Your account was created successfully.')
+            return redirect('main')
+    else:
+        form = SingUpForm()
+
+    context = {
+       'title': 'Sign up',
+       'form': form
+   }
+    return render(request, 'registration/signup.html', context)
