@@ -27,7 +27,8 @@ def index(request):
     context = {
         'title': 'Main',
         'posts_pages': posts_pages,
-        'page_var': page_var
+        'page_var': page_var,
+        'current_user': request.user
     }
 
     return render(request, 'blog/posts.html', context)
@@ -43,8 +44,6 @@ def post_detail(request, id):
     return render(request, 'blog/post_detail.html', context)
 
 def create_post(request):
-    if not request.user.is_staff or not request.user.is_superuser:
-        raise Http404
 
     if request.POST:
         form = PostForm(request.POST, request.FILES)
@@ -64,32 +63,35 @@ def create_post(request):
     return render(request, 'blog/form.html', context)
 
 def edit_post(request, id):
-    if not request.user.is_staff or not request.user.is_superuser:
-        raise Http404
-
     instance = get_object_or_404(Post, id=id)
-    if request.POST:
-        form = PostForm(request.POST, request.FILES, instance=instance)
-        if form.is_valid:
-            instance = form.save(commit=False)
-            instance.save()
-            messages.success(request, 'Post edited')
-            return HttpResponseRedirect(instance.get_post_url())
 
+    if instance.user == request.user or request.user.is_superuser:
+        if request.POST:
+            form = PostForm(request.POST, request.FILES, instance=instance)
+            if form.is_valid:
+                instance = form.save(commit=False)
+                instance.save()
+                messages.success(request, 'Post edited')
+                return HttpResponseRedirect(instance.get_post_url())
+
+        else:
+            form = PostForm(instance=instance)
+            context = {
+                'form': form,
+                'title': 'Edit Post'
+            }
+
+        return render(request, 'blog/form.html', context)
     else:
-        form = PostForm(instance=instance)
-        context = {
-            'form': form,
-            'title': 'Edit Post'
-        }
+        return redirect('main')
 
-    return render(request, 'blog/form.html', context)
 
 def delete_post(request, id):
     post = get_object_or_404(Post, id=id)
-    post.delete()
-    messages.warning(request, 'Post deleted.')
-    return redirect('main')
+    if post.user == request.user or request.user.is_superuser:
+        post.delete()
+        messages.warning(request, 'Post deleted.')
+        return redirect('main')
 
 def signup(request):
     if request.method == 'POST':
