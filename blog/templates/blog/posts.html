@@ -19,17 +19,16 @@
       </div>
       <div class="card-content">
         <span class="card-title activator grey-text text-darken-4"><a href="{% url 'post_detail' post.id %}">{{ post.title }}</a><i class="material-icons right">more_vert</i></span>
-        {% if user.is_authenticated %}
-          {% if post.user == current_user %}
-            <a href="{% url 'edit_post' post.id %}"><i class="material-icons black-text right">edit</i></a>
-            <a href="{% url 'delete_post' post.id %}"><i class="material-icons black-text right">delete</i></a>
-            <div class="clearfix"></div>
-          {% endif %}
-        {% endif %}
-
       </div>
     <div class="card-reveal">
+      {% if user.is_authenticated %}
+        {% if post.user == current_user %}
+          <a href="{% url 'edit_post' post.id %}"><i class="material-icons black-text right">edit</i></a>
+          <a href="{% url 'delete_post' post.id %}"  id="delete-post"><i class="material-icons black-text right">delete</i></a>
+        {% endif %}
+      {% endif %}
       <span class="card-title grey-text text-darken-4"><i class="material-icons right">close</i></span>
+      <div class="clearfix"></div>
       <p>{{ post.content | truncatewords:25}}</p>
     </div>
   </div>
